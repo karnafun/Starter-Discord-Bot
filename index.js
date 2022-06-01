@@ -1,20 +1,31 @@
 require("dotenv").config();
 const Discord = require("discord.js");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
+client.commands = new Discord.Collection();
 
-	const { commandName } = interaction;
+client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isCommand()) {
+    console.log("invalid interaction: "+interaction.commandName)
+    return;
+  };
 
-	if (commandName === 'ping') {
-		await interaction.reply('Pong!');
-	} else if (commandName === 'server') {
-		await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
-	} else if (commandName === 'user') {
-		await interaction.reply(`Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`);
-	}
+  const command = client.commands.get(interaction.commandName);
+
+  if (!command) return;
+
+  try {
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    await interaction.reply({
+      content: "There was an error while executing this command!",
+      ephemeral: true,
+    });
+  }
 });
 client.on("ready", async () => {
   console.log("ready ");
