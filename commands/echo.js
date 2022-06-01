@@ -7,7 +7,7 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("input")
-        .setDescription("The input to echo back")
+        .setDescription("The input to echo back zz")
         .setRequired(true)
     ),
   async execute(interaction) {
