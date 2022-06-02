@@ -21,6 +21,13 @@ function getRelevantInfoOnly(data) {
       image: ct.strDrinkThumb,
       instructions:ct.strInstructions,
       print:function(){
+        let res = this.name +'\r\n'
+        res += `Served in: ${this.glass}`+'\r\n'
+        res+= "How to make:"+'\r\n'
+        res+= this.ingredients+'\r\n'
+        res+= "online instructions:"+'\r\n'
+        res+= this.instructions+'\r\n'
+        return res;
         console.log(this.name)
         console.log(`Served in: ${this.glass}`)
         console.log("How to make:")
