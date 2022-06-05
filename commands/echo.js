@@ -7,10 +7,11 @@ module.exports = {
     .addStringOption((option) =>
       option
         .setName("input")
-        .setDescription("The input to echo back zz")
+        .setDescription("The input to echo back")
         .setRequired(true)
     ),
   async execute(interaction) {
-    await interaction.reply("Pong!");
+    const userInput = interaction.options.getString("input")
+    await interaction.reply(userInput);
   },
 };
