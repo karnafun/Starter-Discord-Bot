@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Discord = require("discord.js");
-const { registerAllFunctions } = require('./deploy-commands')
+const { registerAllFunctions,deleteAllCommands } = require('./src/deploy-commands')
 const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
 
 
@@ -8,6 +8,7 @@ client.commands = new Discord.Collection();
 
 
 client.on("ready", async () => {
+  // await deleteAllCommands()
   await registerAllFunctions(client)
   console.log("ready ");
 });
