@@ -21,8 +21,7 @@ module.exports = {
       const command = require(`./commands/${file}`);
       commands.push(command.data.toJSON());
       client.commands.set(command.data.name, command)
-    }
-    console.log("client commands:", client.commands)
+    }    
     const rest = new REST({ version: "9" }).setToken(process.env.TOKEN);
 
 
