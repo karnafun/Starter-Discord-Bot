@@ -1,17 +1,23 @@
+//main require
 require("dotenv").config();
 const Discord = require("discord.js");
+const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
+//require deployment (auto vs manual for replit.com)
 const {
   registerAllFunctions,
   deleteAllCommands,
 } = require("./src/deploy-commands");
-const client = new Discord.Client({ intents: ["GUILDS", "GUILD_MESSAGES"] });
+const {
+  registerSlashCommandsManually,
+} = require("./src/deploy-commands-manually");
+//require functions
 const { twitch_loop } = require("./src/twitch-api");
 
 client.commands = new Discord.Collection();
 
 client.on("ready", async () => {
-  // await deleteAllCommands()
-  await registerAllFunctions(client);
+  await registerSlashCommandsManually(client);
+  //await registerAllFunctions(client);
   twitch_loop(client, 100000, 30);
   console.log("ready ");
 });

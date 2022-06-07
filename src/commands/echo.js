@@ -1,7 +1,10 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 
-module.exports = {
-  data: new SlashCommandBuilder()
+
+
+async function echo(){
+  return {
+    data:new SlashCommandBuilder()
     .setName("echo")
     .setDescription("Echos back your input")
     .addStringOption((option) =>
@@ -13,5 +16,10 @@ module.exports = {
   async execute(interaction) {
     const userInput = interaction.options.getString("input")
     await interaction.reply(userInput);
-  },
+  }
+  }
+}
+
+module.exports = {
+  echo
 };
