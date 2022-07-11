@@ -7,6 +7,7 @@ const { cocktail } = require("./commands/cocktail");
 const { twitch_streams } = require("./commands/twitch");
 const { ping } = require("./commands/ping");
 const { echo } = require("./commands/echo");
+const { waterReminder } = require("./commands/water");
 
 const token = process.env.TOKEN;
 const clientId = process.env.APPLICATION_ID;
@@ -18,12 +19,20 @@ async function registerSlashCommandsManually(client) {
   let _cocktail = await cocktail();
   let _twitch_streams = await twitch_streams(client);
   let _echo = await echo();
-  let commands = [_ping.data.toJSON(), _echo.data.toJSON(), _cocktail.data.toJSON(), _twitch_streams.data.toJSON()];
+  let _waterReminder = await waterReminder();
+  let commands = [
+    _ping.data.toJSON(),
+    _echo.data.toJSON(),
+    _cocktail.data.toJSON(),
+    _twitch_streams.data.toJSON(),
+    _waterReminder.data.toJSON(),
+  ];
 
   client.commands.set(_ping.data.name, _ping);
   client.commands.set(_echo.data.name, _echo);
   client.commands.set(_cocktail.data.name, _cocktail);
   client.commands.set(_twitch_streams.data.name, _twitch_streams);
+  client.commands.set(_waterReminder.data.name, _waterReminder);
 
   rest
     .put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })

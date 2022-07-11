@@ -1,3 +1,4 @@
+const {keepAlive} = require('./server')
 //main require
 require("dotenv").config();
 const Discord = require("discord.js");
@@ -18,7 +19,7 @@ client.commands = new Discord.Collection();
 client.on("ready", async () => {
   await registerSlashCommandsManually(client);
   //await registerAllFunctions(client);
-  twitch_loop(client, 100000, 30);
+  twitch_loop(client, 100000, 30, ['rocket','league','call of duty','cod','cs:go','csgo','counter','strike']);
   console.log("ready ");
 });
 
@@ -30,15 +31,17 @@ client.on("interactionCreate", async (interaction) => {
     return;
   }
 
-  try {
-    await command.execute(interaction);
+  try {  
+    console.log(client.to)
+    await command.execute(interaction,client);
   } catch (error) {
     console.error(error);
     await interaction.reply({
-      content: "There was an error while executing this command!",
+      content: "There was an error while executing this command!" +error,
       ephemeral: true,
     });
   }
 });
 
+// keepAlive();
 client.login(process.env.TOKEN);

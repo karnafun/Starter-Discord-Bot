@@ -64,6 +64,7 @@ async function cocktail() {
         .setDescription(res[0].print())
         .setColor("#0099ff");
       await interaction.reply({ embeds: [embed] });
+      console.log("i have finished sending the interaction reply blat")
     },
   };
 }

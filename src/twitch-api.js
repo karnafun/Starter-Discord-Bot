@@ -30,23 +30,25 @@ async function topStreams(numOfStreams) {
   return results;
 }
 
-async function twitch_inner_loop(client, wantedViewCount, snoozeTimeInMinutes) {
-  let channel = client.channels.cache.get("930932295093874689");
+async function twitch_inner_loop(client, wantedViewCount, snoozeTimeInMinutes,gameList) {
+  let channel = client.channels.cache.get("812670353931239434");  
   let streams = await topStreams(5);
   streams.forEach((_stream) => {
     if (
       client.liveStreams.filter((s) => s.streamer === _stream.streamer)
         .length === 0 &&
       _stream.viewers > wantedViewCount &&
-      _stream.isLive
+      _stream.isLive&&
+      gameList.some(v => _stream.game.includes(v))
     ) {
+
       client.liveStreams.push(_stream);
     }
   });
   client.liveStreams.forEach((_liveStream) => {
     if (_liveStream.isLive && _liveStream.viewers > wantedViewCount) {
       let timePassed = Math.floor((Date.now() - _liveStream.time) / 1000);
-      if (!_liveStream.notified || timePassed > snoozeTimeInMinutes * 60) {
+      if (!_liveStream.notified || timePassed > snoozeTimeInMinutes * 1440) {
         console.log("Updating channel on stream:", _liveStream.streamer);
         let message = `Live Stream With ${_liveStream.viewers} Viewers
                         Playing:${_liveStream.game}
@@ -58,12 +60,12 @@ async function twitch_inner_loop(client, wantedViewCount, snoozeTimeInMinutes) {
     }
   });
 }
-async function twitch_loop(client, wantedViewCount, snoozeTimeInMinutes) {
+async function twitch_loop(client, wantedViewCount, snoozeTimeInMinutes, gameList) {
   console.log("starting twitch loop");
   client.liveStreams = [];
 
   setInterval(async () => {
-    await twitch_inner_loop(client, wantedViewCount, snoozeTimeInMinutes);
+    await twitch_inner_loop(client, wantedViewCount, snoozeTimeInMinutes,gameList);
   }, 1000);
 }
 module.exports = {
